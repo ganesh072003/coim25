@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Login & Registration</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('https://i.pinimg.com/736x/ec/f1/f4/ecf1f493713ce728953a80f22b69995f.jpg') no-repeat center center;
+            background-size: cover; /* Adjusted for normal size */
+            background-position: center;
+            margin: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            background: linear-gradient(45deg, #000000, #ff0000, #0000ff);
+            animation: bgColorChange 3s infinite alternate;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+            border: 5px solid;
+            animation: borderColorChange 3s infinite alternate;
+        }
+        @keyframes borderColorChange {
+            0% { border-color: #ff0000; }
+            100% { border-color: #add8e6; }
+        }
+        @keyframes bgColorChange {
+            0% { background: linear-gradient(45deg, #000000, #ff0000, #0000ff); }
+            100% { background: linear-gradient(45deg, #0000ff, #ff0000, #000000); }
+        }
+        .input-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .switch {
+            margin-top: 10px;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .switch:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-box">
+            <h2 id="form-title">Welcome Back!</h2>
+            <form id="authForm">
+                <div class="input-group" id="nameField" style="display: none;">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="Enter your name">
+                </div>
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" id="submitBtn">Sign In</button>
+            </form>
+            <p class="switch" id="switchForm">Don't have an account? Register here</p>
+        </div>
+    </div>
+    <script>
+        let isLogin = true;
+        document.getElementById("switchForm").addEventListener("click", function() {
+            isLogin = !isLogin;
+            document.getElementById("form-title").innerText = isLogin ? "Welcome Back!" : "Create an Account";
+            document.getElementById("submitBtn").innerText = isLogin ? "Sign In" : "Register";
+            document.getElementById("nameField").style.display = isLogin ? "none" : "block";
+            document.getElementById("switchForm").innerText = isLogin ? "Don't have an account? Register here" : "Already have an account? Sign in";
+        });
+
+        document.getElementById("authForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const name = document.getElementById("name").value;
+            
+            if (!isLogin) {
+                localStorage.setItem("userEmail", email);
+                localStorage.setItem("userPassword", password);
+                localStorage.setItem("userName", name);
+                alert("Registration successful! Please log in.");
+                isLogin = true;
+                document.getElementById("switchForm").click();
+            } else {
+                const storedEmail = localStorage.getItem("userEmail");
+                const storedPassword = localStorage.getItem("userPassword");
+                if (email === storedEmail && password === storedPassword) {
+                    alert("Login successful! Welcome " + localStorage.getItem("userName") + "!");
+                    window.location.href = "/coin.html"; // Redirect to the next page
+                } else {
+                    alert("Invalid email or password. Please try again.");
+                }
+            }
+        });
+    </script>
+</body>
+</html>
